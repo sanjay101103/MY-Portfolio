@@ -6,17 +6,29 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/sanjay101103/MY-Portfolio.git'
+                url: 'https://github.com/sanjay101103/MY-Portfolio.git'
             }
         }
 
-        stage('Deploy to IIS') {
+        stage('Deploy') {
             steps {
-                bat '''
-                xcopy "%WORKSPACE%\\*" "C:\\inetpub\\wwwroot\\" /E /Y /I
-                iisreset
+                sh '''
+                sudo rm -rf /usr/share/nginx/html/*
+                sudo cp -r * /usr/share/nginx/html/
+                sudo chmod -R 755 /usr/share/nginx/html
+                sudo systemctl restart nginx
                 '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Website deployed successfully!'
+        }
+
+        failure {
+            echo 'Deployment failed!'
         }
     }
 }
