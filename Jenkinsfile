@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -9,30 +10,13 @@ pipeline {
             }
         }
 
-        stage('Verify Files') {
+        stage('Deploy to IIS') {
             steps {
                 bat '''
-                    echo Checking files...
-                    dir
-
-                    if not exist index.html (
-                        echo index.html not found
-                        exit /b 1
-                    )
-
-                    echo Website files are ready
+                xcopy "%WORKSPACE%\\*" "C:\\inetpub\\wwwroot\\" /E /Y /I
+                iisreset
                 '''
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Portfolio project is ready!'
-        }
-
-        failure {
-            echo 'Pipeline failed!'
         }
     }
 }
