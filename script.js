@@ -8,8 +8,8 @@ new Typed(".typing",{
   strings:[
     "Cloud Engineer",
     "DevOps Learner",
-    "AWS Enthusiast",
-    "Mern stack"
+    "AWS Enthusiast"
+  
    
   ],
   typeSpeed:70,
